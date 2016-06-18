@@ -1,6 +1,6 @@
-#include "block.h"
+#include "stick.h"
 
-Block::Block(float x, float y, float w, float d, QTimer *timer, QPixmap pixmap, b2World *world, QGraphicsScene *scene):GameItem(world)
+Stick::Stick(float x, float y, float w, float d, QTimer *timer, QPixmap pixmap, b2World *world, QGraphicsScene *scene):GameItem(world)
 {
     // Set pixmap
     g_pixmap.setPixmap(pixmap);
@@ -16,13 +16,13 @@ Block::Block(float x, float y, float w, float d, QTimer *timer, QPixmap pixmap, 
     g_body = world->CreateBody(&bodydef);
 
     b2PolygonShape bodyshape;
-    bodyshape.SetAsBox(w/2,d/2);
+    bodyshape.SetAsBox(w/1.9,d/1.9);
 
     b2FixtureDef fixturedef;
     fixturedef.shape = &bodyshape;
-    fixturedef.density = BLOCK_DENSITY;
-    fixturedef.friction = BLOCK_FRICTION;
-    fixturedef.restitution = BLOCK_RESTITUTION;
+    fixturedef.density = STICK_DENSITY;
+    fixturedef.friction = STICK_FRICTION;
+    fixturedef.restitution = STICK_RESTITUTION;
     g_body->SetAngularDamping(3);
     g_body->CreateFixture(&fixturedef);
 
@@ -31,4 +31,3 @@ Block::Block(float x, float y, float w, float d, QTimer *timer, QPixmap pixmap, 
 
     scene->addItem(&g_pixmap);
 }
-

@@ -19,7 +19,7 @@ public slots:
     void paint();
     // TODO virtual void collide();
 
-protected:
+public:
     b2Body *g_body;
     QGraphicsPixmapItem g_pixmap;
     QSizeF g_size;

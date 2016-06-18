@@ -49,6 +49,13 @@
      <number>0</number>
     </property>
     <item>
+     <widget class="QPushButton" name="Reset">
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QGraphicsView" name="graphicsView"/>
     </item>
    </layout>

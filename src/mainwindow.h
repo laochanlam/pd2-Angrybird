@@ -11,7 +11,7 @@
 #include <iostream> 
 #include <QWidget>
 #include <QLabel>
-
+#include <QPushButton>
 
 
 #include <gameitem.h>
@@ -19,6 +19,7 @@
 #include <bird.h>
 #include <pig.h>
 #include <block.h>
+#include <stick.h>
 
 namespace Ui {
 class MainWindow;
@@ -34,6 +35,8 @@ public:
     void showEvent(QShowEvent *);
     bool eventFilter(QObject *,QEvent *event);
     void closeEvent(QCloseEvent *);
+
+
 signals:
     // Signal for closing the game
     void quitGame();
@@ -42,12 +45,16 @@ private slots:
     void tick();
     // For debug slot
     void QUITSLOT();
+    void on_Reset_clicked();
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
     b2World *world;
     QList<GameItem *> itemList;
     QTimer timer;
+
+    bool flag;
     float final_x,final_y;
     float x_start,y_start;
     float x_end,y_end;
@@ -55,6 +62,17 @@ private:
     Bird *birdB;
     Bird *birdC;
     Bird *birdD;
+    QPushButton *Reset;
+    Bird *birdNow;
+    Pig *pig;
+    Block *left;
+    Block *right;
+    Block *shelf;
+    Stick *stick1;
+    Stick *stick2;
+    Stick *stick3;
+
+
     int birdCounting;
     bool kick;
 };

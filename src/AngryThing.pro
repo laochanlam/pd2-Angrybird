@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     bird.cpp \
     land.cpp \
     pig.cpp \
-    block.cpp
+    block.cpp \
+    stick.cpp
 
 HEADERS  += mainwindow.h \
     Box2D/Collision/Shapes/b2ChainShape.h \
@@ -72,7 +73,8 @@ HEADERS  += mainwindow.h \
     bird.h \
     land.h \
     pig.h \
-    block.h
+    block.h \
+    stick.h
 
 FORMS    += mainwindow.ui
 

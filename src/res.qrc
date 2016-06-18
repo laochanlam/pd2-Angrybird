@@ -4,9 +4,20 @@
         <file alias="birdA.png">image/Normal_Bird_1.png</file>
         <file alias="pig.png">image/pig.png</file>
         <file alias="birdB.png">image/fatB.png</file>
-        <file alias="birdC.png">image/11.png</file>
-        <file alias="birdD.png">image/2222.png</file>
+        <file>image/11.png</file>
+        <file>image/2222.png</file>
         <file alias="redblock.png">image/321.png</file>
         <file alias="blueblock.png">image/12321.png</file>
+        <file alias="bg.png">image/BACKGROUND_9_LAYER_1.png</file>
+        <file alias="bg.jpg">image/249339.jpg</file>
+        <file alias="birdC.png">image/BIRD_BIG_BROTHER.png</file>
+        <file>image/BIRD_BLUE.png</file>
+        <file alias="stick.png">image/BLOCK_LIGHT_10X1_1.png</file>
+        <file alias="birdA2.png">image/Normal_Bird_2.png</file>
+        <file alias="birdA3.png">image/Normal_Bird_3.png</file>
+        <file alias="birdA4.png">image/Normal_Bird_4.png</file>
+        <file alias="birdD.png">image/BIRD_YELLOW.png</file>
+        <file alias="newb.png">image/Try-Again-Buttonnew.png</file>
+        <file alias="shit.png">image/shit.png</file>
     </qresource>
 </RCC>
