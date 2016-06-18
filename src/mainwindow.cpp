@@ -23,52 +23,33 @@ MainWindow::~MainWindow()
 
 void MainWindow::showEvent(QShowEvent *)
 {
-    // Setting the QGraphicsScene
+
     scene = new QGraphicsScene(0,0,960,540);
     ui->graphicsView->setScene(scene);
-    // Create world
     world = new b2World(b2Vec2(0.0f, -9.8f));
-    // Setting Size
     GameItem::setGlobalSize(QSizeF(32,18),size());
-    // Create ground (You can edit here)
-    itemList.push_back(new Land(16.0f,1.5f,32.0f,3.0f,QPixmap(":/ground.png").scaled(960 ,90),world,scene));
-
-    // Create bird (You can edit here)
-
+    new Land(16.0f,1.5f,32.0f,3.0f,QPixmap(":/ground.png").scaled(960 ,90),world,scene);
 
 
 
     birdD = new Bird(3.0f, 8.0f, 1.0f,&timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
     pig = new Pig(25.0f,6.0f, 1.0f,&timer,QPixmap(":/pig.png").scaled(60, 60),world,scene);
-    left = new Block(23.0f,5.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
-    right = new Block(27.0f,5.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
+    left = new Block(23.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
+    right = new Block(27.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
     shelf = new Block(3.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
-    stick1 = new Stick(24.8f,10.0f,4.0f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
-    stick2 = new Stick(24.8f,15.0f,4.0f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
-    stick3 = new Stick(24.8f,20.0f,4.0f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
+    stick1 = new Stick(24.8f,10.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
+    stick2 = new Stick(24.8f,13.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
+    stick3 = new Stick(24.8f,15.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
     birdCounting = 8;
 
+
     QPushButton *Reset = new QPushButton(this);
-    Reset->setGeometry(30,5,50,50);
+    Reset->setGeometry(30,10,125,50);
     connect(Reset, SIGNAL (released()), this, SLOT (on_Reset_clicked()));
-    //Reset->setStyleSheet(":/birdA.png");
-    //Reset->setObjectName("Reset");
+    Reset->setObjectName("Reset");
     Reset->show();
+    Reset->setStyleSheet("#Reset{border-image:url(:/newb.png)}");
 
-    //Block *left = new Block(23.0f,10.0f,0.18f,1.5f,&timer,QPixmap(":/redblock.png").scaled(60,100),world,scene);
-
-
-
-    final_x = abs(x_start)-abs(x_end);
-    final_y =abs(y_start)-abs(y_end);
-
-    // Setting the Velocity
-   // birdA->setLinearVelocity(b2Vec2(50,0));
-
-
-    itemList.push_back(birdA);
-   // itemList.push_back(pig);
-    // Timer
 
 
 
@@ -77,6 +58,7 @@ void MainWindow::showEvent(QShowEvent *)
     timer.start(100/6);
 }
 
+
 bool MainWindow::eventFilter(QObject *, QEvent *event)
 {
 
@@ -84,7 +66,7 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 
     QMouseEvent *mouse_event = static_cast<QMouseEvent*>(event);
 
-    // Hint: Notice the Number of every event!
+
     if(event->type() == QEvent::MouseButtonPress)
     {
 
@@ -99,8 +81,7 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 
 
 
-        //birdA->setLinearVelocity(b2Vec2(mouse_event->x(), mouse_event->y()));
-            //kick = true;
+
             x_start = mouse_event->x();
             y_start = mouse_event->y();
 
@@ -144,7 +125,7 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
                 birdCounting--;
                 kick = false;
             }
-            //std::cout << 'x=' <<final_x/4 <<std::endl<<'y='<< final_y/4 << std::endl ;
+
         }
         if (birdCounting == 4 && kick == true)
         {
@@ -216,6 +197,7 @@ void MainWindow::closeEvent(QCloseEvent *)
 
 void MainWindow::on_Reset_clicked()
 {
+
     delete birdD;
     delete pig;
     delete left;
@@ -225,20 +207,35 @@ void MainWindow::on_Reset_clicked()
     delete stick2;
     delete stick3;
 
+
     birdD = new Bird(3.0f, 8.0f, 1.0f,&timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
-    if (birdC) delete birdC;
-    if (birdB) delete birdB;
-    if (birdA) delete birdA;
+    if (birdCounting <= 7)
+    {
+        delete birdC;
+        if (birdCounting <= 5)
+        {
+            delete birdB;
+            birdB->deletethem();
+            if (birdCounting <= 3)
+            {
+                delete birdA;
+                birdA->deletethem();
+            }
+        }
+    }
 
 
     pig = new Pig(25.0f,6.0f, 1.0f,&timer,QPixmap(":/pig.png").scaled(60, 60),world,scene);
-    left = new Block(23.0f,5.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
-    right = new Block(27.0f,5.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
+    left = new Block(23.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
+    right = new Block(27.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
     shelf = new Block(3.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
-    stick1 = new Stick(24.8f,10.0f,4.0f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
-    stick2 = new Stick(24.8f,15.0f,4.0f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
-    stick3 = new Stick(24.8f,20.0f,4.0f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
+    stick1 = new Stick(24.8f,10.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
+    stick2 = new Stick(24.8f,13.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
+    stick3 = new Stick(24.8f,15.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
     birdCounting = 8;
+    kick = true;
+
+
 }
 
 
@@ -252,7 +249,7 @@ void MainWindow::tick()
         birdCounting--;
     }
 
-    if (birdCounting == 7 && birdD->GetOriginPosition().x>6 && flag == true)
+    if (birdCounting == 7 && abs(birdD->GetOriginPosition().x)>5 && flag == true)
     {
         flag = false;
         birdC = new Bird(3.0f, 8.0f, 1.0f,&timer,QPixmap(":/birdD.png").scaled(60, 60),world,scene,10);
@@ -265,7 +262,7 @@ void MainWindow::tick()
         birdCounting--;
     }
 
-    if (birdCounting == 5 && birdC->GetOriginPosition().x>6 && flag == false)
+    if (birdCounting == 5 && abs(birdC->GetOriginPosition().x)>5 && flag == false)
     {
         flag = true;
         birdB = new Bird(3.0f, 8.0f, 1.0f,&timer,QPixmap(":/birdC.png").scaled(60, 60),world,scene,10);
@@ -278,7 +275,7 @@ void MainWindow::tick()
         birdCounting--;
     }
 
-    if (birdCounting == 3 && birdB->GetOriginPosition().x>6 && flag == true)
+    if (birdCounting == 3 && abs(birdB->GetOriginPosition().x)>5 && flag == true)
     {
         flag = false;
         birdA = new Bird(3.0f, 8.0f, 1.0f,&timer,QPixmap(":/birdB.png").scaled(60, 60),world,scene,10);
@@ -306,7 +303,6 @@ void MainWindow::tick()
 
 void MainWindow::QUITSLOT()
 {
-    // For debug
     std::cout << "Quit Game Signal receive !" << std::endl ;
 }
 

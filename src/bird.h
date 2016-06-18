@@ -18,6 +18,7 @@ public:
     b2Vec2 GetLinearVelocity();
     b2Vec2 GetOriginPosition();
     bool DetectBound();
+    void deletethem();
 
 
     void skillA();

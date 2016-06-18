@@ -85,14 +85,14 @@ void Bird::skillA(){
 }
 
 void Bird::skillB(){
-    g_body->SetLinearVelocity(g_body->GetLinearVelocity()+b2Vec2(4,4));
+    g_body->SetLinearVelocity(g_body->GetLinearVelocity()+b2Vec2(4,2));
 }
 
 void Bird::skillC(QTimer *timer,b2World *world, QGraphicsScene *scene){
     if (skillCcontroler == 1)
     {
         NewA = new Bird(GetOriginPosition().x, GetOriginPosition().y-1 , 1.0f,timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
-        NewB = new Bird(GetOriginPosition().x, GetOriginPosition().y+1 , 1.0f,timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
+        NewB = new Bird(GetOriginPosition().x-2, GetOriginPosition().y-1 , 1.0f,timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
         NewC = new Bird(GetOriginPosition().x-1, GetOriginPosition().y , 1.0f,timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
         NewD = new Bird(GetOriginPosition().x-1, GetOriginPosition().y+1 , 1.0f,timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
         NewE = new Bird(GetOriginPosition().x-1, GetOriginPosition().y-1 , 1.0f,timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
@@ -107,4 +107,18 @@ void Bird::skillD(QTimer *timer,b2World *world, QGraphicsScene *scene){
         NewF->g_body->SetLinearVelocity(b2Vec2(g_body->GetLinearVelocity().x+20,0));
         skillDcontroler--;
     }
+}
+
+void Bird::deletethem(){
+    if (skillCcontroler == 0)
+    {
+        delete NewA;
+        delete NewB;
+        delete NewC;
+        delete NewD;
+        delete NewE;
+    }
+    if (skillDcontroler == 0)
+        delete NewF;
+
 }
