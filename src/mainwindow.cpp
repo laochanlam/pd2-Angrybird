@@ -29,21 +29,34 @@ void MainWindow::showEvent(QShowEvent *)
     world = new b2World(b2Vec2(0.0f, -9.8f));
     GameItem::setGlobalSize(QSizeF(32,18),size());
     new Land(16.0f,1.5f,32.0f,3.0f,QPixmap(":/ground.png").scaled(960 ,90),world,scene);
-
+    itemList.clear();
 
 
     birdD = new Bird(3.0f, 8.0f, 1.0f,&timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
-    pig = new Pig(25.0f,6.0f, 1.0f,&timer,QPixmap(":/pig.png").scaled(60, 60),world,scene);
-    left = new Block(23.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
-    right = new Block(27.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
-    shelf = new Block(3.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
+    pig = new Pig(25.0f,4.0f, 1.0f,&timer,QPixmap(":/pig.png").scaled(60, 60),world,scene);
+    left = new Block(23.0f,5.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
+    right = new Block(27.0f,5.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
+    shelf = new Block(3.0f,5.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
     stick1 = new Stick(24.8f,10.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
     stick2 = new Stick(24.8f,13.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
     stick3 = new Stick(24.8f,15.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
+    score = 0;
+    ScoreStart = false;
+    itemList.push_back(birdD);
+    itemList.push_back(pig);
+    itemList.push_back(left);
+    itemList.push_back(right);
+    itemList.push_back(shelf);
+    itemList.push_back(stick1);
+    itemList.push_back(stick2);
+    itemList.push_back(stick3);
+
     birdCounting = 8;
+    kick = true;
+    notboom = true;
 
 
-    QPushButton *Reset = new QPushButton(this);
+    Reset = new QPushButton(this);
     Reset->setGeometry(30,10,125,50);
     connect(Reset, SIGNAL (released()), this, SLOT (on_Reset_clicked()));
     Reset->setObjectName("Reset");
@@ -51,9 +64,28 @@ void MainWindow::showEvent(QShowEvent *)
     Reset->setStyleSheet("#Reset{border-image:url(:/newb.png)}");
 
 
+    Quit = new QPushButton(this);
+    Quit->setGeometry(160,10,125,50);
+    connect(Quit, SIGNAL (released()), this, SLOT (close()));
+    Quit->setObjectName("Quit");
+    Quit->show();
+    Quit->setStyleSheet("#Quit{border-image:url(:/quit.png)}");
+
+
+    label_Score = new QLabel(this);
+    Score = "Score: " + QString::number(score);
+    label_Score->setText(Score);
+    label_Score->setGeometry(50,460,300,100);
+    label_Score->setFont(QFont("Minion Pro Med",20));
+    colour.setColor(QPalette::WindowText,Qt::white);
+    label_Score->setPalette(colour);
+    label_Score->show();
+
+
 
 
     connect(&timer,SIGNAL(timeout()),this,SLOT(tick()));
+
     connect(this,SIGNAL(quitGame()),this,SLOT(QUITSLOT()));
     timer.start(100/6);
 }
@@ -119,8 +151,9 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
             if (final_y <= -100)
                 final_y = -100;
 
-            if (final_x/4 -1 >= 0 || final_y/4 -1 >= 0)
+            if (abs(final_x) >= 10 || abs(final_y) >= 10)
             {
+                birdA->g_body->SetType(b2_dynamicBody);
                 birdA->setLinearVelocity(b2Vec2(final_x/4,final_y/4));
                 birdCounting--;
                 kick = false;
@@ -138,8 +171,9 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
             if (final_y <= -100)
                 final_y = -100;
 
-            if (final_x/4 -1 >= 0 || final_y/4 -1 >= 0)
+            if (abs(final_x) >= 10 || abs(final_y) >= 10)
             {
+                birdB->g_body->SetType(b2_dynamicBody);
                 birdB->setLinearVelocity(b2Vec2(final_x/4,final_y/4));
                 birdCounting--;
                 kick = false;
@@ -156,8 +190,9 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
             if (final_y <= -100)
                 final_y = -100;
 
-            if (final_x/4 -1 >= 0 || final_y/4 -1 >= 0)
+            if (abs(final_x) >= 10 || abs(final_y) >= 10)
             {
+                birdC->g_body->SetType(b2_dynamicBody);
                 birdC->setLinearVelocity(b2Vec2(final_x/4,final_y/4));
                 birdCounting--;
                 kick = false;
@@ -174,8 +209,9 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
             if (final_y <= -100)
                 final_y = -100;
 
-            if (final_x/4 -1 >= 0 || final_y/4 -1 >= 0)
+            if (abs(final_x) >= 10 || abs(final_y) >= 10)
             {
+                birdD->g_body->SetType(b2_dynamicBody);
                 birdD->setLinearVelocity(b2Vec2(final_x/4,final_y/4));
                 birdCounting--;
                 flag = true;
@@ -183,8 +219,6 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
             }
         }
 
-        //std::cout << 'x=' <<final_x <<std::endl<<'y='<< final_y << std::endl ;
-        //std::cout << x_end << x_end << std::endl ;
     }
     return false;
 }
@@ -198,42 +232,41 @@ void MainWindow::closeEvent(QCloseEvent *)
 void MainWindow::on_Reset_clicked()
 {
 
-    delete birdD;
-    delete pig;
-    delete left;
-    delete right;
-    delete shelf;
-    delete stick1;
-    delete stick2;
-    delete stick3;
 
-
-    birdD = new Bird(3.0f, 8.0f, 1.0f,&timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
-    if (birdCounting <= 7)
+    while (!itemList.isEmpty())
     {
-        delete birdC;
-        if (birdCounting <= 5)
-        {
-            delete birdB;
+        if (itemList.back() == birdB)
             birdB->deletethem();
-            if (birdCounting <= 3)
-            {
-                delete birdA;
-                birdA->deletethem();
-            }
-        }
+        if (itemList.back() == birdA)
+            birdA->deletethem();
+        delete itemList.back();
+        itemList.pop_back();
     }
 
 
-    pig = new Pig(25.0f,6.0f, 1.0f,&timer,QPixmap(":/pig.png").scaled(60, 60),world,scene);
-    left = new Block(23.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
-    right = new Block(27.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
-    shelf = new Block(3.0f,6.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
+    birdD = new Bird(3.0f, 8.0f, 1.0f,&timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
+    pig = new Pig(25.0f,4.0f, 1.0f,&timer,QPixmap(":/pig.png").scaled(60, 60),world,scene);
+    left = new Block(23.0f,5.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
+    right = new Block(27.0f,5.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
+    shelf = new Block(3.0f,5.0f,1.0f,4.0f,&timer,QPixmap(":/redblock.png").scaled(30,120),world,scene);
     stick1 = new Stick(24.8f,10.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
     stick2 = new Stick(24.8f,13.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
     stick3 = new Stick(24.8f,15.0f,4.5f,2.95f,&timer,QPixmap(":/stick.png").scaled(130,90),world,scene);
     birdCounting = 8;
     kick = true;
+    notboom = true;
+    score = 0;
+    Score = "Score: " + QString::number(score);
+    label_Score->setText(Score);
+    ScoreStart = false;
+    itemList.push_back(birdD);
+    itemList.push_back(pig);
+    itemList.push_back(left);
+    itemList.push_back(right);
+    itemList.push_back(shelf);
+    itemList.push_back(stick1);
+    itemList.push_back(stick2);
+    itemList.push_back(stick3);
 
 
 }
@@ -243,29 +276,39 @@ void MainWindow::tick()
 {
     world->Step(1.0/60.0,6,2);
 
-    if ( ( birdD->DetectBound() == true || birdD->GetLinearVelocity().x - 1 <= 0 || birdD->GetLinearVelocity().y - 5 == 0 )&& birdCounting == 7)
+
+
+
+    if ( ( birdD->DetectBound() == true || birdD->GetLinearVelocity().x  <= 0 || birdD->GetLinearVelocity().y - 5 == 0 )&& birdCounting == 7)
     {
         kick = true;
         birdCounting--;
+        ScoreStart = true;
     }
 
-    if (birdCounting == 7 && abs(birdD->GetOriginPosition().x)>5 && flag == true)
+    if (birdCounting == 7 && (abs(birdD->GetOriginPosition().x-3)>2 || abs(birdD->GetOriginPosition().y-3)>8) && flag == true)
     {
         flag = false;
         birdC = new Bird(3.0f, 8.0f, 1.0f,&timer,QPixmap(":/birdD.png").scaled(60, 60),world,scene,10);
+        birdC->g_body->SetType(b2_staticBody);
+        itemList.push_back(birdC);
+
     }
 
     if (birdCounting == 5)
-    if ( ( birdC->DetectBound() == true || birdC->GetLinearVelocity().x - 1 <= 0 || birdC->GetLinearVelocity().y - 1 == 0 ))
+    if ( ( birdC->DetectBound() == true || birdC->GetLinearVelocity().x  <= 0 || birdC->GetLinearVelocity().y - 1 == 0 ))
     {
         kick = true;
         birdCounting--;
+
     }
 
-    if (birdCounting == 5 && abs(birdC->GetOriginPosition().x)>5 && flag == false)
+    if (birdCounting == 5 && (abs(birdC->GetOriginPosition().x-3)>2 || abs(birdC->GetOriginPosition().y-3)>8) && flag == false)
     {
         flag = true;
         birdB = new Bird(3.0f, 8.0f, 1.0f,&timer,QPixmap(":/birdC.png").scaled(60, 60),world,scene,10);
+        birdB->g_body->SetType(b2_staticBody);
+        itemList.push_back(birdB);
     }
 
     if (birdCounting == 3)
@@ -275,28 +318,52 @@ void MainWindow::tick()
         birdCounting--;
     }
 
-    if (birdCounting == 3 && abs(birdB->GetOriginPosition().x)>5 && flag == true)
+    if (birdCounting == 3 && (abs(birdB->GetOriginPosition().x-3)>2 || abs(birdB->GetOriginPosition().y-3)>8) && flag == true)
     {
         flag = false;
         birdA = new Bird(3.0f, 8.0f, 1.0f,&timer,QPixmap(":/birdB.png").scaled(60, 60),world,scene,10);
+        birdA->g_body->SetType(b2_staticBody);
+        itemList.push_back(birdA);
     }
 
-
-
-    /*
-     *
-    if ( ( birdA->DetectBound() == true || birdA->GetLinearVelocity().x - 1 <= 0 || birdA->GetLinearVelocity().y - 1 == 0 )&& birdCounting == 7)
+    if (birdCounting == 1)
+    if (birdA->DetectBound() == true || birdA->GetLinearVelocity().x - 1 <= 0 || birdA->GetLinearVelocity().y - 1 == 0 )
     {
         kick = true;
-
+        birdCounting--;
     }
+    if (notboom)
+        if (pig->GetLinearVelocity().x > 0 || pig->GetLinearVelocity().y > 0 )
+        {
+            delete pig;
+            notboom = false;
+            score = score + 10000;
+            Score = "Score: " + QString::number(score);
+            label_Score->setText(Score);
+            label_Score->show();
+        }
 
-    if (birdCounting == 1 && birdD->GetOriginPosition().x>6 && flag == true)
+    if ((stick1->GetLinearVelocity().x > 0 || stick1->GetLinearVelocity().y > 0) && ScoreStart && !(stick1->DetectBound()))
     {
-        flag = false;
-
+        score = score + abs(stick1->GetLinearVelocity().x);
+        score = score + abs(stick1->GetLinearVelocity().y);
+        Score = "Score: " + QString::number(score);
+        label_Score->setText(Score);
     }
-    */
+    if ((stick2->GetLinearVelocity().x > 0 || stick2->GetLinearVelocity().y > 0) && ScoreStart && !(stick2->DetectBound()))
+    {
+        score = score + abs(stick2->GetLinearVelocity().x);
+        score = score + abs(stick2->GetLinearVelocity().y);
+        Score = "Score: " + QString::number(score);
+        label_Score->setText(Score);
+    }
+    if ((stick3->GetLinearVelocity().x > 0 || stick3->GetLinearVelocity().y > 0) && ScoreStart && !(stick3->DetectBound()))
+    {
+        score = score + abs(stick3->GetLinearVelocity().x);
+        score = score + abs(stick3->GetLinearVelocity().y);
+        Score = "Score: " + QString::number(score);
+        label_Score->setText(Score);
+    }
     scene->update();
 
 }

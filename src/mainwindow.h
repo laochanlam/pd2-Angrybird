@@ -63,6 +63,7 @@ private:
     Bird *birdC;
     Bird *birdD;
     QPushButton *Reset;
+    QPushButton *Quit;
     Bird *birdNow;
     Pig *pig;
     Block *left;
@@ -71,6 +72,12 @@ private:
     Stick *stick1;
     Stick *stick2;
     Stick *stick3;
+    bool notboom;
+    bool ScoreStart;
+    int score;
+    QLabel *label_Score;
+    QString Score;
+    QPalette colour;
 
 
     int birdCounting;

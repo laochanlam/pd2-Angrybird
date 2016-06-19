@@ -48,7 +48,6 @@ b2Vec2 Bird::GetLinearVelocity()
 
 b2Vec2 Bird::GetOriginPosition()
 {
-    //std::cout<<g_body->GetPosition().x<<" ";
     return g_body->GetPosition();
 }
 
@@ -96,6 +95,17 @@ void Bird::skillC(QTimer *timer,b2World *world, QGraphicsScene *scene){
         NewC = new Bird(GetOriginPosition().x-1, GetOriginPosition().y , 1.0f,timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
         NewD = new Bird(GetOriginPosition().x-1, GetOriginPosition().y+1 , 1.0f,timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
         NewE = new Bird(GetOriginPosition().x-1, GetOriginPosition().y-1 , 1.0f,timer,QPixmap(":/birdA.png").scaled(60, 60),world,scene,10);
+        NewA->g_body->SetLinearVelocity(b2Vec2(rand()%20,g_body->GetLinearVelocity().y-rand()%20));
+        NewB->g_body->SetLinearVelocity(b2Vec2(rand()%20,g_body->GetLinearVelocity().y-rand()%20));
+        NewC->g_body->SetLinearVelocity(b2Vec2(rand()%20,g_body->GetLinearVelocity().y-rand()%20));
+        NewD->g_body->SetLinearVelocity(b2Vec2(rand()%20,g_body->GetLinearVelocity().y-rand()%20));
+        NewE->g_body->SetLinearVelocity(b2Vec2(rand()%20    ,g_body->GetLinearVelocity().y-rand()%20));
+
+        itemListInBird.push_back(NewA);
+        itemListInBird.push_back(NewB);
+        itemListInBird.push_back(NewC);
+        itemListInBird.push_back(NewD);
+        itemListInBird.push_back(NewE);
         skillCcontroler--;
     }
 }
@@ -104,21 +114,19 @@ void Bird::skillD(QTimer *timer,b2World *world, QGraphicsScene *scene){
     if (skillDcontroler == 1)
     {
         NewF = new Bird(GetOriginPosition().x, GetOriginPosition().y-2 , 1.0f,timer,QPixmap(":/shit.png").scaled(60, 60),world,scene,10);
-        NewF->g_body->SetLinearVelocity(b2Vec2(g_body->GetLinearVelocity().x+20,0));
+        NewF->g_body->SetLinearVelocity(b2Vec2(0,g_body->GetLinearVelocity().y-20));
+        g_body->SetLinearVelocity(b2Vec2(0,g_body->GetLinearVelocity().y+20));
         skillDcontroler--;
+        itemListInBird.push_back(NewF);
     }
 }
 
 void Bird::deletethem(){
-    if (skillCcontroler == 0)
+
+    while (!itemListInBird.isEmpty())
     {
-        delete NewA;
-        delete NewB;
-        delete NewC;
-        delete NewD;
-        delete NewE;
+        delete itemListInBird.back();
+        itemListInBird.pop_back();
     }
-    if (skillDcontroler == 0)
-        delete NewF;
 
 }

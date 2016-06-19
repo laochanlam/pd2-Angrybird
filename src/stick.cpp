@@ -31,3 +31,19 @@ Stick::Stick(float x, float y, float w, float d, QTimer *timer, QPixmap pixmap, 
 
     scene->addItem(&g_pixmap);
 }
+
+b2Vec2 Stick::GetLinearVelocity()
+{
+    return g_body->GetLinearVelocity();
+}
+
+b2Vec2 Stick::GetOriginPosition()
+{
+    return g_body->GetPosition();
+}
+
+bool Stick::DetectBound()
+{
+     if (GetOriginPosition().x >= 32.0f || GetOriginPosition().x < 0.0f ||GetOriginPosition().y > 18.0f || GetOriginPosition().y < 0.0f)  return true;
+     return false;
+}

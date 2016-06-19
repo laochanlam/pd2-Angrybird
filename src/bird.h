@@ -36,6 +36,7 @@ public:
     Bird *NewE;
     Bird *NewF;
     float pos_x,pos_y;
+    QList<GameItem *> itemListInBird;
 };
 
 #endif // BIRD_H

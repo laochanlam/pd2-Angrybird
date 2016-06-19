@@ -28,6 +28,13 @@ Pig::Pig(float x, float y, float radius, QTimer *timer, QPixmap pixmap, b2World 
     connect(timer, SIGNAL(timeout()), this,SLOT(paint()));
 
     scene->addItem(&g_pixmap);
+
+
+}
+
+b2Vec2 Pig::GetLinearVelocity()
+{
+    return g_body->GetLinearVelocity();
 }
 
 

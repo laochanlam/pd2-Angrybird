@@ -19,5 +19,6 @@
         <file alias="birdD.png">image/BIRD_YELLOW.png</file>
         <file alias="newb.png">image/Try-Again-Buttonnew.png</file>
         <file alias="shit.png">image/shit.png</file>
+        <file alias="quit.png">image/qiut.png</file>
     </qresource>
 </RCC>
