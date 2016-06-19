@@ -93,11 +93,7 @@ void MainWindow::showEvent(QShowEvent *)
 
 bool MainWindow::eventFilter(QObject *, QEvent *event)
 {
-
-
-
-    QMouseEvent *mouse_event = static_cast<QMouseEvent*>(event);
-
+    mouse_event = static_cast<QMouseEvent*>(event);
 
     if(event->type() == QEvent::MouseButtonPress)
     {
@@ -239,8 +235,14 @@ void MainWindow::on_Reset_clicked()
             birdB->deletethem();
         if (itemList.back() == birdA)
             birdA->deletethem();
+
+        if (notboom == false && itemList.back()== pig)
+            itemList.pop_back();
+
         delete itemList.back();
         itemList.pop_back();
+
+
     }
 
 

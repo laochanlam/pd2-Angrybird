@@ -53,7 +53,7 @@ private:
     b2World *world;
     QList<GameItem *> itemList;
     QTimer timer;
-
+    QMouseEvent *mouse_event;
     bool flag;
     float final_x,final_y;
     float x_start,y_start;
@@ -64,7 +64,6 @@ private:
     Bird *birdD;
     QPushButton *Reset;
     QPushButton *Quit;
-    Bird *birdNow;
     Pig *pig;
     Block *left;
     Block *right;
@@ -78,8 +77,6 @@ private:
     QLabel *label_Score;
     QString Score;
     QPalette colour;
-
-
     int birdCounting;
     bool kick;
 };

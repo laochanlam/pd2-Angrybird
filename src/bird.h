@@ -25,6 +25,7 @@ public:
     void skillB();
     void skillC(QTimer *timer,b2World *world, QGraphicsScene *scene);
     void skillD(QTimer *timer,b2World *world, QGraphicsScene *scene);
+
     float BLOCK_DENSITY;
     int skillAcontroler;
     int skillCcontroler;
